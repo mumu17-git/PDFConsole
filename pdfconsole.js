@@ -33,7 +33,6 @@ int main(void) {
 }
 `};
 
-
 function prog01_out_js() {
   var outs = "";
   var count = 0;
