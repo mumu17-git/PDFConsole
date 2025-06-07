@@ -1,4 +1,4 @@
-//-------------prog01----------------
+//-------------prog01/02----------------
 
 const prog01_c = {type: "c", content:
 `
@@ -57,7 +57,183 @@ function prog01_out_js() {
   return outs;
 }
 
-let prog01_out = {type: "out", content: prog01_out_js()};
+let prog01_out = {type: "out", timing: -1, content: prog01_out_js()};
+
+
+const prog02_c = {type: "c", content:`
+/*
+サイコロを振り続けて出目の出現数と平均を求める
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h> // UNIX
+//#include <windows.h> // Windows
+
+#define DICE 6
+#define GRAPH_W 100
+#define GRAPH_S 100
+
+int length(int *array) {
+    return DICE;
+}
+
+void drawGraph(int *array) {
+    int max = 0;
+    
+    for(int i = 0;i < length(array);i++) {
+        if(array[i] > max) max = array[i];
+        for(int j = 0;j < array[i];j++) {
+            
+        }
+    }
+    
+    double times = 1;
+    
+    if(max/GRAPH_S > GRAPH_W) times = ((double) GRAPH_W/(double) max * (double) GRAPH_S);
+
+    for(int i = 0;i < length(array);i++) {
+        printf("[%d] ", i + 1);
+        for(int j = 0;j < array[i]*times/(double) GRAPH_S;j++) {
+            printf("=");
+        }
+        printf("   %d\n", array[i]);
+    }
+}
+
+double getAverage(int *array) {
+    int sum = 0;
+    int count = 0;
+    for(int i = 0;i < length(array);i++) {
+        sum += array[i] * (i + 1);
+        count += array[i];
+    }
+
+    return (double) sum / (double) count;
+}
+
+int getCount(int *array) {
+    int count = 0;
+    for(int i = 0;i < length(array);i++) {
+        count += array[i];
+    }
+    return count;
+}
+
+int main(void) {
+    int count = 0;
+    int count_one_loop_max = 5;
+    int rand_n;
+    int sum = 0;
+    double average;
+    int count_array[DICE] = {0};
+
+    srand((unsigned int)(time(NULL)));
+    
+    while (1) {
+        for (int i = 0; i < count_one_loop_max; i++) {
+            rand_n = (rand() % DICE) + 1;
+            count_array[rand_n - 1]++;
+        }
+
+        system("clear");
+        drawGraph(count_array);
+        average = getAverage(count_array);
+        count = getCount(count_array);
+        printf("Average:  %.2f , Count: %d\n", average, count);
+        usleep(10);
+    }
+
+    return 0;
+}
+`};
+
+const DICE = 6;
+
+let prog02_out_js_variable = {
+  count: 0,
+  count_one_loop_max: 5,
+  rand_n: 0,
+  sum: 0,
+  average: 0.0,
+  count_array: Array(DICE).fill(0)
+}
+
+function prog02_out_js() {
+  const GRAPH_W = 90.0;
+  const GRAPH_S = 5.0;
+
+  function drawGraph(array = []) {
+    var max = 0.0;
+    for(var i = 0;i < array.length;i++) {
+      if(array[i] > max) max = array[i];
+    }
+
+    var times = 1;
+
+    if(max/GRAPH_S > GRAPH_W) times = (GRAPH_W/max*GRAPH_S);
+
+    d_clear();
+    
+    for(var i = 0;i < array.length;i++) {
+      d_line(`[${i+1}] `, false);
+      for(var j = 0;j < array[i]*times/GRAPH_S;j++) {
+        d_line("=", false);
+      }
+      d_line(`   ${array[i]}`);
+    }
+  }
+
+  function getAverage(array = []) {
+    var sum = 0;
+    var count = 0;
+    for(var i = 0;i < array.length;i++) {
+      sum += array[i] * (i + 1);
+      count += array[i];
+    }
+
+    return sum / count;
+  }
+
+  function getCount(array = []) {
+    var count = 0;
+    for(var i = 0;i < array.length;i++) {
+      count += array[i];
+    }
+
+    return count;
+  }
+
+  function rand(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  function loop() {
+    for(var i = 0;i < prog02_out_js_variable.count_one_loop_max;i++) {
+      prog02_out_js_variable.rand_n = rand(DICE) + 1;
+      prog02_out_js_variable.count_array[prog02_out_js_variable.rand_n - 1]++;
+    }
+
+    drawGraph(prog02_out_js_variable.count_array);
+    prog02_out_js_variable.average = getAverage(prog02_out_js_variable.count_array);
+    prog02_out_js_variable.count = getCount(prog02_out_js_variable.count_array);
+    d_line(`Average:  ${prog02_out_js_variable.average.toFixed(2)} , Count: ${prog02_out_js_variable.count}`);
+  }
+
+  //const sleep = (time) => new Promise((r) => app.setTimeout(r, time));
+
+  function main() {
+    while(whileProgLooping) {
+      loop();
+    }
+  }
+
+  loop();
+}
+
+let prog02_out = {type: "out", timing: 0, content: prog02_out_js};
+
 //------------- end -----------------
 
 
@@ -73,6 +249,7 @@ function init() {
   setDirContents(currentPath_List);
 
   setDirContents(currentPath_List, {'prog01.c': prog01_c, 'prog01.out': prog01_out});
+  setDirContents(currentPath_List, {'prog02.c': prog02_c, 'prog02.out': prog02_out});
 
   countdown();
 }
@@ -92,6 +269,7 @@ var cinput = this.getField('console_input');
 var cdisplay = this.getField('console_display');
 
 var isLogShowing = false;
+var whileProgLooping = false;
 function drawConsole() {
   var iscp = isEntered();
   if(iscp == 0) {
@@ -106,7 +284,7 @@ function drawConsole() {
   } else {
     cinput.value = "";
   }
-  if(!isLogShowing)
+  if(!isLogShowing&&!whileProgLooping)
     cdisplay.value = consoleContents;
 }
 
@@ -345,6 +523,15 @@ function o_line(text = "") {
   logSplit();
 }
 
+function d_line(text = "", lb = true) {
+  cdisplay.value = cdisplay.value+text;
+  if(lb) cdisplay.value = cdisplay.value+"\n";
+}
+
+function d_clear() {
+  cdisplay.value = "";
+}
+
 function c_pwd() {
   var str = currentPath_List.join(getFilePath_Separator());
   if(currentPath_List.length <= 1) 
@@ -374,6 +561,7 @@ function c_mkdir(name = "") {
   setDirContents(currentPath_List.concat([name]));
 }
 
+let timing0_interval = null;
 function c_crtDirCnt(name = "") {
   if(name == "") {
     o_line("-bash: ./: Is a directory");
@@ -388,12 +576,19 @@ function c_crtDirCnt(name = "") {
   }
 
   if (getDirContents_tmp0[name].type === "out") {
-    o_line(getDirContents_tmp0[name].content);
-    bash_update(name,getDirContents_tmp0[name].type);
+    if(getDirContents_tmp0[name].timing == -1) {
+      o_line(getDirContents_tmp0[name].content);
+      bash_update(name,getDirContents_tmp0[name].type);
+    }else if (getDirContents_tmp0[name].timing == 0) {
+      whileProgLooping = true;
+      timing0_interval = app.setInterval("prog02_out_js()", 50);
+    }
+    
   }else {
     o_line("Permission denied");
   }
 }
+
 
 function c_cat(name = "") {
   if(name == "") {
@@ -443,4 +638,6 @@ function c_log(page) {
 function c_exit() {
   cdisplay.value = "";
   isLogShowing = false;
+  whileProgLooping = false;
+  app.clearInterval(timing0_interval);
 }
