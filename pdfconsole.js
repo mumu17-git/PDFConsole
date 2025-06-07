@@ -83,9 +83,6 @@ void drawGraph(int *array) {
     
     for(int i = 0;i < length(array);i++) {
         if(array[i] > max) max = array[i];
-        for(int j = 0;j < array[i];j++) {
-            
-        }
     }
     
     double times = 1;
