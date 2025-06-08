@@ -157,8 +157,9 @@ var CANVAS_BOTTOM = %(CANVAS_BOTTOM)s;
 
 page.Contents.stream = """
 BT
-/F1 20 Tf
-55 100 Td (Input Linux Command into the TextField on the bottom!) Tj
+/F1 12 Tf
+150 110 Td (Input Linux Command into the TextField on the bottom!) Tj
+-20 -18 Td (Please refresh the page and try again if there is something wrong.) Tj
 ET
 """
 
