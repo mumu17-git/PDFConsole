@@ -159,7 +159,8 @@ page.Contents.stream = """
 BT
 /F1 12 Tf
 150 110 Td (Input Linux Command into the TextField on the bottom!) Tj
--20 -18 Td (Please refresh the page and try again if there is something wrong.) Tj
+60 -18 Td (Please open in chrome browser.) Tj
+-80 -18 Td (Please refresh the page and try again if there is something wrong.) Tj
 ET
 """
 
