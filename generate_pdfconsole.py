@@ -155,19 +155,17 @@ var CANVAS_BOTTOM = %(CANVAS_BOTTOM)s;
 
 """ % locals())
 
-'''
 page.Contents.stream = """
 BT
-/F1 24 Tf
-85 100 Td (Input Linux Command into the TextField!) Tj
+/F1 20 Tf
+55 100 Td (Input Linux Command into the TextField on the bottom!) Tj
 ET
 """
-'''
 
 
 out = PdfWriter()
 
-cover_pdf = PdfReader('cover.pdf')
+cover_pdf = PdfReader('表紙.pdf')
 for cover_pdf_page in cover_pdf.pages:
     out.addpage(cover_pdf_page)
 
